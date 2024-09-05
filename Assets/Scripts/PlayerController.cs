@@ -10,9 +10,13 @@ public class PlayerController : MonoBehaviour
 	private PlayerInputController input;
 	public Animator animator;
 
+	// Transform refs
+	private Transform cameraTransform;
+
 	[Header("PLAYER")]
 	public float moveSpeed;
 	public float jumpForce;
+	public float rotationSpeed;
 	public LayerMask groundMask;
 	private Vector2 moveInput;
 	private Vector3 moveDirection;
@@ -33,6 +37,9 @@ public class PlayerController : MonoBehaviour
 
 		// ANIMATIONS HASHES
 		runHash = Animator.StringToHash("Speed");
+
+		// Transform refs
+		cameraTransform = Camera.main.transform;
 	}
 
 	private void Update()
@@ -45,6 +52,14 @@ public class PlayerController : MonoBehaviour
 
 		moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
 
+		moveDirection = moveDirection.x * cameraTransform.transform.right.normalized + moveDirection.z * cameraTransform.transform.forward.normalized;
+		moveDirection.y = 0;
+
+		if (moveInput != Vector2.zero)
+		{
+			Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+			transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+		}
 		rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
 
 		// Animation
