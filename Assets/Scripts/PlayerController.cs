@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
 
 		input.Player.Jump.performed += OnJumpClick;
 
-
 		rb = GetComponent<Rigidbody>();
 
 

@@ -47,17 +47,17 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 },
                 {
                     ""name"": ""Camera"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""aec89c17-2904-4c00-a2da-a3fffb7ce454"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""PC Controls"",
                     ""id"": ""8407c49c-fefa-4f6d-9c25-1559b81d5c08"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -113,6 +113,17 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 },
                 {
                     ""name"": """",
+                    ""id"": ""57415c1b-779e-478b-a9ea-3eb6ece91e92"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""989aca98-9753-4266-a446-6b49e5a24453"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -124,11 +135,33 @@ public partial class @PlayerInputController: IInputActionCollection2, IDisposabl
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1c8569fb-f140-4ec2-9659-853321249b51"",
-                    ""path"": ""<Mouse>/delta"",
+                    ""id"": ""3a7c207a-b4a5-46d9-a8d1-dbce6e41251f"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de852c7b-b074-4994-a7cc-f1e3424292dd"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f072e166-8867-4975-b616-b1cddb5568c7"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
