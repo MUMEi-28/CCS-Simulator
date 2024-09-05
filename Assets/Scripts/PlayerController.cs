@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
 	// ANIMATIONS
 	private int runHash;
+	private int jumpHash;
 
 	private void Start()
 	{
@@ -37,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
 		// ANIMATIONS HASHES
 		runHash = Animator.StringToHash("Speed");
+		jumpHash = Animator.StringToHash("Jump");
+
 
 		// Transform refs
 		cameraTransform = Camera.main.transform;
@@ -45,6 +48,7 @@ public class PlayerController : MonoBehaviour
 	private void Update()
 	{
 		HandleMovement();
+		Animations();
 	}
 	private void HandleMovement()
 	{
@@ -61,9 +65,14 @@ public class PlayerController : MonoBehaviour
 			transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 		}
 		rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
-
-		// Animation
+	}
+	private void Animations()
+	{
+		// Run
 		animator.SetFloat(runHash, moveInput.normalized.magnitude);
+
+		// Jump
+		animator.SetBool(jumpHash, !IsGrounded());
 	}
 
 	#region Methods
