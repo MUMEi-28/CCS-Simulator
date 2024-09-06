@@ -15,7 +15,8 @@ public class PlayerController : MonoBehaviour
 	private Transform cameraTransform;
 
 	[Header("PLAYER")]
-	public float moveSpeed;
+	public float walkSpeed;
+	public float runSpeed;
 	public float jumpForce;
 	public float rotationSpeed;
 	public LayerMask groundMask;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
 
 	// ANIMATIONS
+	private int speedHash;
 	private int runHash;
 	private int jumpHash;
 	private int attackHash;
@@ -48,7 +50,8 @@ public class PlayerController : MonoBehaviour
 
 
 		// ANIMATIONS HASHES
-		runHash = Animator.StringToHash("Speed");
+		speedHash = Animator.StringToHash("Speed");
+		runHash = Animator.StringToHash("Running");
 		jumpHash = Animator.StringToHash("Jump");
 		attackHash = Animator.StringToHash("Attack");
 
@@ -83,14 +86,24 @@ public class PlayerController : MonoBehaviour
 		// Make sure the player don't move when attacking
 		if (!isAttacking)
 		{
-			rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
+			if (input.Player.Sprint.IsPressed())
+			{
+				rb.velocity = new Vector3(moveDirection.x * runSpeed, rb.velocity.y, moveDirection.z * runSpeed);
+
+				animator.SetBool(runHash, true);
+			}
+			else
+			{
+				rb.velocity = new Vector3(moveDirection.x * walkSpeed, rb.velocity.y, moveDirection.z * walkSpeed);
+
+				animator.SetBool(runHash, false);
+			}
 		}
 	}
 	private void Animations()
 	{
 		// Run
-		animator.SetFloat(runHash, moveInput.normalized.magnitude);
-
+		animator.SetFloat(speedHash, moveInput.normalized.magnitude);
 		// Jump
 		animator.SetBool(jumpHash, !IsGrounded());
 	}
