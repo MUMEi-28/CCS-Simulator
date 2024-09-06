@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 	private Rigidbody rb;
 	private PlayerInputController input;
 	public Animator animator;
+	public static PlayerController Instance;
 
 	// Transform refs
 	private Transform cameraTransform;
@@ -21,9 +22,19 @@ public class PlayerController : MonoBehaviour
 	private Vector2 moveInput;
 	private Vector3 moveDirection;
 
+	[HideInInspector]
+	public bool isAttacking = false;
+
+
 	// ANIMATIONS
 	private int runHash;
 	private int jumpHash;
+	private int attackHash;
+
+	private void Awake()
+	{
+		Instance = this;
+	}
 
 	private void Start()
 	{
@@ -31,6 +42,7 @@ public class PlayerController : MonoBehaviour
 		input.Enable();
 
 		input.Player.Jump.performed += OnJumpClick;
+		input.Player.Attack.performed += OnAttackClick;
 
 		rb = GetComponent<Rigidbody>();
 
@@ -38,10 +50,13 @@ public class PlayerController : MonoBehaviour
 		// ANIMATIONS HASHES
 		runHash = Animator.StringToHash("Speed");
 		jumpHash = Animator.StringToHash("Jump");
+		attackHash = Animator.StringToHash("Attack");
 
 
 		// Transform refs
 		cameraTransform = Camera.main.transform;
+
+		// Setting up variables
 	}
 
 	private void Update()
@@ -63,7 +78,13 @@ public class PlayerController : MonoBehaviour
 			Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
 			transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 		}
-		rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
+
+
+		// Make sure the player don't move when attacking
+		if (!isAttacking)
+		{
+			rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
+		}
 	}
 	private void Animations()
 	{
@@ -75,12 +96,19 @@ public class PlayerController : MonoBehaviour
 	}
 
 	#region Methods
-
 	public bool IsGrounded()
 	{
 		// A simple check to see if the player is grounded. This can be adjusted based on the player's collider size and the ground detection method.
 		return Physics.Raycast(transform.position, Vector3.down, 1.1f, groundMask);
 	}
+
+	/*private IEnumerator AttackTimer()
+	{
+		yield return new WaitForSeconds()
+	}*/
+
+
+	
 	#endregion
 	#region OnButtonClick
 	public void OnJumpClick(InputAction.CallbackContext callbackContext)
@@ -91,6 +119,17 @@ public class PlayerController : MonoBehaviour
 			rb.velocity += new Vector3(0, jumpForce, 0);
 
 			print("JUMPED");
+		}
+	}
+	public void OnAttackClick(InputAction.CallbackContext callbackContext)
+	{
+		if (callbackContext.performed && !isAttacking)
+		{
+			// Attack
+			animator.SetTrigger(attackHash);
+
+			print("ATTACKED");
+
 		}
 	}
 	#endregion
